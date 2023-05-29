@@ -5,8 +5,8 @@
  */
 class RegisterPage
 {
-    public function __construct() {
-        var_dump('asdasd');
+    public function __construct()
+    {
 
         $this->run_hook();
     }
@@ -16,7 +16,10 @@ class RegisterPage
      **/
     private function run_hook()
     {
-        add_action('init', 'create_about_us_page');
+        add_action('init', [$this, 'create_about_us_page']);
+
+        // Hook into the 'wp_trash_post' filter to prevent the deletion of the "about-us" page
+        add_filter('wp_trash_post', [$this, 'prevent_about_us_deletion'], 10, 1);
     }
 
     /**
@@ -36,10 +39,10 @@ class RegisterPage
                 'post_type'     => 'page',
                 'page_template' => 'about-us-template.php' // Replace with the actual template filename
             );
-        
+
             // Insert the new page into the database
             $page_id = wp_insert_post($new_page);
-        
+
             if ($page_id) {
                 echo "The About Us page has been created successfully!";
             } else {
@@ -49,9 +52,16 @@ class RegisterPage
             // The "about-us" page already exists
             echo "The About Us page already exists.";
         }
-            
     }
+    public function prevent_about_us_deletion($post_id) {
+        // Check if the post ID matches the "about-us" page ID
+        if ($post_id === get_page_by_path('about-us')->ID) {
+            // Prevent the deletion of the "about-us" page
+            return false;
+        }
     
+        return $post_id;
+    }
 }
 
 $register_page = new RegisterPage();
