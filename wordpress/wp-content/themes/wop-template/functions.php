@@ -17,6 +17,9 @@ if (!defined('MODULE_VIEW_DIR'))
     define('MODULE_VIEW_DIR', THEME_DIR . '/views');
 if (!defined('OBJECT_DIR'))
     define('OBJECT_DIR', THEME_DIR . '/objects');
+
+if (!defined('PAGE_TEMPLATES_DIR'))
+    define('PAGE_TEMPLATES_DIR', THEME_DIR . '/page-templates');
 /*
  * Add theme Support
  */
